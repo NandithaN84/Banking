@@ -1,8 +1,14 @@
-FROM eclipse-temurin:17-jre
+
+FROM maven:3.9.9-eclipse-temurin-17
 
 WORKDIR /app
 
-COPY target/CalculatorApp-1.0-SNAPSHOT.jar app.jar    #Change according to your project structure.
+COPY pom.xml .
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+RUN mvn dependency:go-offline
 
+COPY src ./src
+
+RUN mvn clean package -DskipTests
+
+CMD ["java", "-jar", "target/Banking-1.0-SNAPSHOT.jar"]
